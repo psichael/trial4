@@ -1,20 +1,96 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { getNextQuestion } from './question_controller';
+import { SaveAnswers } from './db'; // add this line
+import * as Notifications from 'expo-notifications';
+import * as Permission from 'expo-permissions';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+import EmojiQuestion from './emoji_q';
+import OpenQuestion from './open_q';
+import RadioQuestion from './radio_q';
+import ShareAnswers from './share_answers';
+
+
+
+function QuestionView({ question, onSaveAnswer }) {
+ if (!question || question.questionId === 0) {
+   return <Text style={{ marginBottom: 20 }}>No more questions</Text>;
+ }
+switch (question.answerType) {
+ case 'smilies':
+   return <EmojiQuestion key={question.questionId} question={question} onSaveAnswer={onSaveAnswer} />;
+ case 'radios':
+   return <RadioQuestion key={question.questionId} question={question} onSaveAnswer={onSaveAnswer} />;
+ case 'text':
+   return <OpenQuestion key={question.questionId} question={question} onSaveAnswer={onSaveAnswer} />;
+ default:
+   return null;
 }
+}
+export default function App() {
+ const [question, setQuestion] = useState(null);
+ 
+  const handleGetNextQuestion = async () => {
+ const nextQuestion = await getNextQuestion();
+ setQuestion(nextQuestion);
+ };
+  
+ const handleSaveAnswer = async (questionId, answer) => {
+  if (answer !== undefined) {
+    await SaveAnswers(questionId, answer);
+  }
+  await handleGetNextQuestion();
+};
 
+
+ useEffect(() => {
+ handleGetNextQuestion();
+ }, []);
+  
+ useEffect(() => {
+  const scheduleNotifications = async () => {
+    // Schedule daily notifications at 1pm between the start and end dates
+    const startDate = new Date('2023-03-01');
+    const endDate = new Date('2023-03-31');
+    
+    const now = new Date();
+    if (now >= startDate && now <= endDate) {
+      const trigger = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 20, 40); // schedule notification at 1pm
+      
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: 'Reminder',
+          body: 'Hi, there are new questions waiting for your answer!',
+        },
+        trigger,
+      });
+    }
+  };
+
+  scheduleNotifications();
+}, []);
+
+ 
+ return (
+ <View style={styles.container}>
+ {question && question.questionId !== 0 ? (
+ <QuestionView question={question} onSaveAnswer={handleSaveAnswer} />
+ ) : (
+ <Text style={{ marginBottom: 20 }}>No more questions</Text>
+ )}
+ 
+ <ShareAnswers />
+ </View>
+ );
+}
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+container: {
+ flex: 1,
+ backgroundColor: '#fff',
+ alignItems: 'center',
+ justifyContent: 'center',
+ padding: 20,
+},
 });
+
+
