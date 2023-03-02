@@ -5,7 +5,7 @@ const db = SQLite.openDatabase('db.db');
 
 
 db.transaction(tx => {
-//  tx.executeSql('DROP TABLE IF EXISTS answers;');
+  tx.executeSql('DROP TABLE IF EXISTS answers;');
  tx.executeSql(`
    CREATE TABLE IF NOT EXISTS answers (
      questionId INTEGER,
@@ -22,7 +22,7 @@ export function SaveAnswers(questionId, answer) {
  const timestamp = new Date().getTime();
  const dateAnswered = new Date().toLocaleString();
 //  const dateAnsweredISO = new Date(timestamp).toISOString().slice(0, 10);
-  const dateAnsweredISO = "4";
+  const dateAnsweredISO = "5";
  return new Promise((resolve, reject) => {
    db.transaction(
      tx => {
@@ -45,7 +45,7 @@ export function SaveAnswers(questionId, answer) {
 
 export function isAnswered(questionId) {
 //  const today = new Date().toISOString().slice(0, 10);
-  const today = "4";
+  const today = "5";
  return new Promise((resolve, reject) => {
    db.transaction(tx => {
      tx.executeSql(
