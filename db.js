@@ -12,32 +12,34 @@ db.transaction(tx => {
      answer TEXT,
      dateAnswered TEXT,
      dateAnsweredISO TEXT,
+     remark TEXT,
      timestamp INTEGER PRIMARY KEY
    );
  `);
 });
 
-
-export function SaveAnswers(questionId, answer) {
+export function SaveAnswers(questionId, answer, remark) {
  const timestamp = new Date().getTime();
  const dateAnswered = new Date().toLocaleString();
 //  const dateAnsweredISO = new Date(timestamp).toISOString().slice(0, 10);
   const dateAnsweredISO = "5";
+  
  return new Promise((resolve, reject) => {
    db.transaction(
      tx => {
-       tx.executeSql(
-         `INSERT INTO answers (questionId, answer, dateAnswered, dateAnsweredISO, timestamp) VALUES (?, ?, ?, ?, ?);`,
-         [questionId, answer, dateAnswered, dateAnsweredISO, timestamp],
-         (_, result) => {
-           console.log('Answer stored');
-           resolve(result);
-         },
-         (_, error) => {
-           console.log('Error storing answer:', error);
-           reject(error);
-         }
-       );
+      tx.executeSql(
+        `INSERT INTO answers (questionId, answer, dateAnswered, dateAnsweredISO, remark, timestamp) VALUES (?, ?, ?, ?, ?, ?);`,
+        [questionId, answer, dateAnswered, dateAnsweredISO, remark, timestamp],
+        (_, result) => {
+          console.log('Answer stored');
+          resolve(result);
+        },
+        (_, error) => {
+          console.log('Error storing answer:', error);
+          reject(error);
+        }
+      );
+       
      }
    );
  });
@@ -78,7 +80,8 @@ return new Promise((resolve, reject) => {
             timestamp: answer.timestamp,
             questionId: answer.questionId,
             answer: answer.answer,
-            dateAnswered: answer.dateAnswered
+            dateAnswered: answer.dateAnswered,
+            remark: answer.remark
           };
         }
        console.log('Answers:', answers);

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View, Button } from 'react-native';
 import { SaveAnswers } from './db';
 
-function OpenQuestion({ question, onSaveAnswer, onNextQuestion}) {
+function OpenQuestion({ question, onSaveAnswer}) {
   const [answer, setAnswer] = useState('');
 
   const handleTextChange = (text) => {

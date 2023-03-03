@@ -1,6 +1,6 @@
 import { questions } from './questions';
 import { questionlists } from './questionlist';
-import { isAnswered, SaveAnswers } from './db';
+import { isAnswered } from './db';
 import _ from 'lodash';
 
 

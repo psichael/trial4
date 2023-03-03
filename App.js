@@ -34,7 +34,7 @@ export default function App() {
  setQuestion(nextQuestion);
  };
   
- const handleSaveAnswer = async (questionId, answer) => {
+ const handleSaveAnswer = async (questionId, answer, remark) => {
   if (answer !== undefined) {
     await SaveAnswers(questionId, answer);
   }
@@ -62,7 +62,7 @@ export default function App() {
 
     const now = new Date();
     if (now >= startDate && now <= endDate) {
-      const trigger = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 15, 58); // schedule notification at 1pm
+      const trigger = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 15, 59); // schedule notification at 1pm
 
       const scheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
       const alreadyScheduled = scheduledNotifications.some(
@@ -106,5 +106,3 @@ container: {
  padding: 20,
 },
 });
-
-
