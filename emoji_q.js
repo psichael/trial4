@@ -48,7 +48,7 @@ function EmojiQuestion({ question, onSaveAnswer }) {
           />
         ))}
       
-      {question.hasRemarks && (
+      
        <View>
         <Text>Remark:</Text>
           <TextInput
@@ -58,7 +58,7 @@ function EmojiQuestion({ question, onSaveAnswer }) {
             onSubmitEditing={handleTextChange}
           />
        </View>
-      )}
+      
       <Button title="Next question" onPress={handleSave} />
     </View>
   );

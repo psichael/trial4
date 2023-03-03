@@ -9,8 +9,11 @@ import { SaveAnswers } from './db';
 
 function RadioQuestion({ question, onSaveAnswer }) {
  const [answer, setAnswer] = useState(null);
-  const handlePress = async (option) => {
- setAnswer(option);
+    const handlePress = async (option) => {
+      console.log('before: ', answer)
+        setAnswer(option);
+        console.log('after: ', answer)
+        
  await onSaveAnswer(question.questionId, option);
  };
   return (

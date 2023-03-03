@@ -70,7 +70,7 @@ export async function getAnswers() {
 return new Promise((resolve, reject) => {
   db.transaction(tx => {
     tx.executeSql(
-      'SELECT questionId, answer, dateAnswered, timestamp FROM answers;',
+      'SELECT questionId, answer, dateAnswered, remark, timestamp FROM answers;',
       [],
       (_, { rows }) => {
         const answers = {};
@@ -84,7 +84,7 @@ return new Promise((resolve, reject) => {
             remark: answer.remark
           };
         }
-       console.log('Answers:', answers);
+       console.log('getAnswers:', answers);
        resolve(answers);
       },
       (_, error) => {

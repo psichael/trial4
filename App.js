@@ -17,7 +17,7 @@ function QuestionView({ question, onSaveAnswer }) {
  }
 switch (question.answerType) {
  case 'smilies':
-   return <EmojiQuestion key={question.questionId} question={question} onSaveAnswer={onSaveAnswer} />;
+    return <EmojiQuestion key={question.questionId} question={question} onSaveAnswer={onSaveAnswer} />;
  case 'radios':
    return <RadioQuestion key={question.questionId} question={question} onSaveAnswer={onSaveAnswer} />;
  case 'text':
@@ -26,6 +26,7 @@ switch (question.answerType) {
    return null;
 }
 }
+
 export default function App() {
  const [question, setQuestion] = useState(null);
  
@@ -35,9 +36,9 @@ export default function App() {
  };
   
  const handleSaveAnswer = async (questionId, answer, remark) => {
-  if (answer !== undefined) {
-    await SaveAnswers(questionId, answer);
-  }
+  
+    await SaveAnswers(questionId, answer, remark);    
+ 
   await handleGetNextQuestion();
 };
 
