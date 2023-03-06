@@ -12,8 +12,8 @@ export default function ShareAnswers() {
         console.log('Answers:', answers); 
         
         const csvData = Object.values(answers).map(answer => {
-          const { questionId, answer: ans, dateAnswered, timestamp } = answer;
-          return `${timestamp},${questionId},"${ans}","${dateAnswered}"`;
+          const { questionId, answer: ans, dateAnswered, timestamp, remark } = answer;
+          return `${timestamp},${questionId},"${ans}","${dateAnswered}","${remark}"`;
         }).join('\n');
 
       const result = await Share.share({
