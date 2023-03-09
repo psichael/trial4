@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Share } from 'react-native';
+import { Button, Share, View } from 'react-native';
 import { getAnswers } from './db';
 
 export default function ShareAnswers() {
@@ -38,10 +38,13 @@ export default function ShareAnswers() {
   };
 
   return (
+    <View style={{ marginBottom: 5 }}>
     <Button
       title={exporting ? 'Exporting...' : 'Export data'}
       onPress={handlePress}
       disabled={exporting}
     />
+  </View>
+  
   );
 }

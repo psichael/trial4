@@ -3,7 +3,7 @@ export const questions = {
     questionId: 1,
     questionText: 'How are you feeling today?',
     answerType: 'smilies',
-    radioOptions: ['😞', '🙁', '😐', '🙂', '😃'],
+    radioOptions: ['😃 Very happy', '🙂 Happy', '😐 Neutral', '🙁 Sad', '😞 Very sad'],
     // hasRemarks: true,
   },
   2: {

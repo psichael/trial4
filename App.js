@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View, KeyboardAvoidingView} from 'react-native';
 import { getNextQuestion } from './question_controller';
 import { SaveAnswers } from './db';
 import * as Notifications from 'expo-notifications';
@@ -93,24 +93,67 @@ export default function App() {
 }, []);
 
  
- return (
- <View style={styles.container}>
- {question && question.questionId !== 0 ? (
- <QuestionView question={question} onSaveAnswer={handleSaveAnswer} />
- ) : (
- <Text style={{ marginBottom: 20 }}>No more questions</Text>
- )}
- 
- <ShareAnswers />
- </View>
- );
-}
+return (
+  <KeyboardAvoidingView style={styles.container} behavior="height">
+    {question && question.questionId !== 0 ? (
+      <View style={[styles.questionContainer, { zIndex: 1 }]}>
+        <QuestionView question={question} onSaveAnswer={handleSaveAnswer} style={styles.question} />
+      </View>
+    ) : (
+      <>
+        <View style={[styles.noQuestionContainer, { zIndex: 1 }]}>
+          <Text style={styles.noQuestionText}>No more questions</Text>
+        </View>
+        <View style={styles.shareAnswersContainer}>
+          <ShareAnswers />
+        </View>
+      </>
+    )}
+  </KeyboardAvoidingView>
+);
+};
+
+const COLORS = {
+  PRIMARY: '#007AFF', // Blue
+  SECONDARY: '#FF3B30', // Red
+  LIGHT_BLUE: '#B0E0E6',
+  LIGHT_RED: '#FFC0CB',
+};
+
+const FONT_SIZE = 16;
+
 const styles = StyleSheet.create({
-container: {
- flex: 1,
- backgroundColor: '#fff',
- alignItems: 'center',
- justifyContent: 'center',
- padding: 20,
-},
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
+  },
+  questionContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  question: {
+    color: COLORS.PRIMARY,
+    padding: 10,
+    fontSize: 24
+  },
+  noQuestionContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noQuestionText: {
+    marginBottom: 20,
+    fontSize: FONT_SIZE,
+    color: COLORS.PRIMARY,
+  },
+  shareAnswersContainer: {
+    justifyContent: 'flex-end',
+    position: 'absolute',
+    bottom: 0,
+    zIndex: 0,
+  },
 });

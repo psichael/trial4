@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity} from 'react-native';
 
 const getSmileyTextValue = (smiley) => {
   switch (smiley) {
@@ -37,7 +37,7 @@ function EmojiQuestion({ question, onSaveAnswer }) {
 
   return (
     <View>
-      <Text>{question.questionText}</Text>
+      <Text style={{ fontSize: 20, fontWeight: 'bold', padding: 10, color: '#007AFF' }}>{question.questionText}</Text>
       {question.answerType === 'smilies' &&
         question.radioOptions.map((option) => (
           <SmileyOption
@@ -45,19 +45,21 @@ function EmojiQuestion({ question, onSaveAnswer }) {
             option={option}
             onPress={handlePress}
             selected={answer === option}
-          />
+            />
         ))}
       
       
-       <View>
-        <Text>Remark:</Text>
-          <TextInput
-            style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-            value={remark}
-            onChangeText={handleTextChange}
-            onSubmitEditing={handleTextChange}
-          />
-       </View>
+      <View>
+  <Text>Remark:</Text>
+  <TextInput
+    placeholder= "Only if you feel the need" 
+    style={{ height: 40, borderColor: '#007AFF', borderWidth: 1, marginBottom: 10, padding: 10, borderRadius: 5}}
+    value={remark}
+    onChangeText={handleTextChange}
+    onSubmitEditing={handleTextChange}
+  />
+</View>
+
       
       <Button title="Next question" onPress={handleSave} />
     </View>
@@ -66,14 +68,31 @@ function EmojiQuestion({ question, onSaveAnswer }) {
 
 function SmileyOption({ option, onPress, selected }) {
   return (
-    <View style={{ padding: 5 }}>
-      <Text
-        onPress={() => onPress(option)}
-        style={{ fontSize: 30, color: selected ? 'blue' : 'black' }}
+    <TouchableOpacity onPress={() => onPress(option)}>
+      <View
+        style={[
+          {  flexDirection: 'row', alignItems: 'center' },
+          selected && { backgroundColor: '#B0E0E6', borderRadius: 100 },
+        ]}
       >
-        {option}
-      </Text>
-    </View>
+        <View
+          style={[
+            { borderRadius: 100, backgroundColor: '#fff' },
+            selected && { borderColor: '#007AFF', borderWidth: 2 },
+          ]}
+        >
+          <Text
+            style={[
+              { fontSize: 30, padding: 10 },
+              selected && { color: '#007AFF' },
+            ]}
+          >
+            {option.substring(0, 2)}
+          </Text>
+        </View>
+        <Text style={{ fontSize: 14 }}>{option.substring(2)}</Text>
+      </View>
+    </TouchableOpacity>
   );
 }
 

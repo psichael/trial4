@@ -1,32 +1,26 @@
 {
-  "name": "trial4",
-  "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
-  "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
-  },
-  "dependencies": {
-    "@expo/webpack-config": "^18.0.1",
-    "abort-controller": "^3.0.0",
-    "expo": "~48.0.4",
-    "expo-asset": "~8.9.0",
-    "expo-cli": "^6.3.2",
-    "expo-file-system": "~15.2.2",
-    "expo-notifications": "~0.18.1",
-    "expo-permissions": "~14.1.1",
-    "expo-sqlite": "~11.1.1",
-    "expo-status-bar": "~1.4.4",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-native": "0.71.3",
-    "react-native-uuid": "^2.0.1",
-    "react-native-web": "~0.18.10"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.20.0"
-  },
-  "private": true
-}
+    "name": "test-build",
+    "version": "1.0.0",
+    "main": "node_modules/expo/AppEntry.js",
+    "scripts": {
+      "start": "expo start",
+      "android": "expo start --android",
+      "ios": "expo start --ios",
+      "web": "expo start --web"
+    },
+    "dependencies": {
+      "@expo/webpack-config": "^18.0.1",
+      "expo": "~48.0.5",
+      "expo-notifications": "^0.18.1",
+      "expo-sqlite": "^11.1.1",
+      "expo-status-bar": "~1.4.4",
+      "react": "18.2.0",
+      "react-dom": "18.2.0",
+      "react-native": "0.71.3",
+      "react-native-web": "~0.18.10"
+    },
+    "devDependencies": {
+      "@babel/core": "^7.20.0"
+    },
+    "private": true
+  }
