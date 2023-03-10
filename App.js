@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, KeyboardAvoidingView} from 'react-native';
+import { StyleSheet, Text, View, KeyboardAvoidingView, Image} from 'react-native';
 import { getNextQuestion } from './question_controller';
 import { SaveAnswers } from './db';
 import * as Notifications from 'expo-notifications';
@@ -95,21 +95,24 @@ export default function App() {
  
 return (
   <KeyboardAvoidingView style={styles.container} behavior="height">
-    {question && question.questionId !== 0 ? (
-      <View style={[styles.questionContainer, { zIndex: 1 }]}>
-        <QuestionView question={question} onSaveAnswer={handleSaveAnswer} style={styles.question} />
+      <View style={styles.logoContainer}>
+        <Image source={require('./assets/logo.svg')} style={styles.logo} />
       </View>
-    ) : (
-      <>
-        <View style={[styles.noQuestionContainer, { zIndex: 1 }]}>
-          <Text style={styles.noQuestionText}>No more questions</Text>
-        </View>
-        <View style={styles.shareAnswersContainer}>
-          <ShareAnswers />
-        </View>
-      </>
-    )}
-  </KeyboardAvoidingView>
+      {question && question.questionId !== 0 ? (
+        <View style={[styles.questionContainer, { zIndex: 1 }]}>
+          <QuestionView question ={question} onSaveAnswer={handleSaveAnswer} style={styles.question} />
+    </View>
+  ) : (
+    <>
+      <View style={[styles.noQuestionContainer, { zIndex: 1 }]}>
+        <Text style={styles.noQuestionText}>No more questions</Text>
+      </View>
+      <View style={styles.shareAnswersContainer}>
+        <ShareAnswers />
+      </View>
+    </>
+  )}
+</KeyboardAvoidingView>
 );
 };
 
@@ -130,15 +133,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
   },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+    },
+    logo: {
+      width: 150,
+      height: 50,
+      },
   questionContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    
   },
   question: {
     color: COLORS.PRIMARY,
     padding: 10,
-    fontSize: 24
+    fontSize: 24,
+    borderWidth: 5,
+    borderColor: '#007AFF'
   },
   noQuestionContainer: {
     flex: 1,
