@@ -7,7 +7,7 @@ import _ from 'lodash';
 export async function getNextQuestion() {
  const today = new Date().toISOString().slice(0, 10);
 
- const questionList = questionlists.find((list) => list.dateToShow === today);
+ const questionList = questionlists.find((list) => list.dateToShow === today); 
  if (!questionList) {
    return Promise.resolve(null);
  }

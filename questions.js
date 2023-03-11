@@ -1,7 +1,7 @@
 export const questions = {
   1: {
-    questionId: 4,
-    questionText: 'How are you feeling today222222222?',
+    questionId: 1,
+    questionText: 'How are you feeling today?',
     answerType: 'smilies',
     radioOptions: ['😞', '🙁', '😐', '🙂', '😃'],
     // hasRemarks: true,

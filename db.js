@@ -30,8 +30,7 @@ export function SaveAnswers(questionId, answer, remark) {
       tx.executeSql(
         `INSERT INTO answers (questionId, answer, dateAnswered, dateAnsweredISO, remark, timestamp) VALUES (?, ?, ?, ?, ?, ?);`,
         [questionId, answer, dateAnswered, dateAnsweredISO, remark, timestamp],
-        (_, result) => {
-          console.log(questionId);
+        (_, result) => {          
           resolve(result);
         },
         (_, error) => {
@@ -101,7 +100,7 @@ return new Promise((resolve, reject) => {
             remark: answer.remark
           };
         }
-       console.log('getAnswers:', answers);
+       
        resolve(answers);
       },
       (_, error) => {

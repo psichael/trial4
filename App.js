@@ -39,15 +39,17 @@ export default function App() {
  const handleGetNextQuestion = async () => {
   // Check if GDPR question has been answered
   const gdprAnswered = await gDPR(9999);
-  console.log (gdprAnswered);
-
+  
   if (!gdprAnswered) {
     // If GDPR question hasn't been answered, render the GDPR component
     setShouldRender(true);
+    
   } else {
     // If GDPR question has been answered, fetch the next question
+    setShouldRender(false);    
     const nextQuestion = await getNextQuestion();
     setQuestion(nextQuestion);
+    
   }
 };
  
