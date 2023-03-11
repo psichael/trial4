@@ -1,6 +1,6 @@
 import { questions } from './questions';
 import { questionlists } from './questionlist';
-import { isAnswered } from './db';
+import { isAnswered, gDPR } from './db';
 import _ from 'lodash';
 
 
@@ -22,7 +22,7 @@ export async function getNextQuestion() {
  );
 
 
- if (unansweredQuestionIds.length === 0) {
+ if (unansweredQuestionIds.length === 0 ) {
    return Promise.resolve({ questionId: 0, questionText: 'No more questions', answerType: 'text' });
  }
 

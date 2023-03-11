@@ -1,9 +1,9 @@
 export const questions = {
   1: {
-    questionId: 1,
-    questionText: 'How are you feeling today?',
+    questionId: 4,
+    questionText: 'How are you feeling today222222222?',
     answerType: 'smilies',
-    radioOptions: ['😃 Very happy', '🙂 Happy', '😐 Neutral', '🙁 Sad', '😞 Very sad'],
+    radioOptions: ['😞', '🙁', '😐', '🙂', '😃'],
     // hasRemarks: true,
   },
   2: {
@@ -39,5 +39,10 @@ export const questions = {
     answerType: 'text',
     // hasRemarks: false,
   },
-  
-  };
+  7: {
+    questionId: 7,
+    questionText: 'With which of the following statements do you agree:',
+    answerType: 'radios',
+    radioOptions: ['I feel positive about the members of my team', 'I feel apprehensive about the members of my team', 'I haven’t met my team members yet'],
+  }
+}

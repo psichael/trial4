@@ -49,19 +49,20 @@ function EmojiQuestion({ question, onSaveAnswer }) {
         ))}
       
       
-      <View>
-  <Text>Remark:</Text>
-  <TextInput
-    placeholder= "Only if you feel the need" 
-    style={{ height: 40, borderColor: '#007AFF', borderWidth: 1, marginBottom: 10, padding: 10, borderRadius: 5}}
-    value={remark}
-    onChangeText={handleTextChange}
-    onSubmitEditing={handleTextChange}
-  />
-</View>
-
+      <View style={{marginTop:20}}>
+        <Text>Remark:</Text>
+        <TextInput
+          placeholder= "Only if you feel the need" 
+          style={{ height: 40, borderColor: '#007AFF', borderWidth: 1, marginBottom: 10, padding: 10, borderRadius: 5}}
+          value={remark}
+          onChangeText={handleTextChange}
+          onSubmitEditing={handleTextChange}
+        />
+      </View>
+      <View style={{padding: 30}}>
+        <Button title="Next question" onPress={handleSave} />
+      </View>      
       
-      <Button title="Next question" onPress={handleSave} />
     </View>
   );
 }
@@ -70,20 +71,20 @@ function SmileyOption({ option, onPress, selected }) {
   return (
     <TouchableOpacity onPress={() => onPress(option)}>
       <View
-        style={[
-          {  flexDirection: 'row', alignItems: 'center' },
-          selected && { backgroundColor: '#B0E0E6', borderRadius: 100 },
-        ]}
+        // style={[
+        //   {  flexDirection: 'row', alignItems: 'center' },
+        //   selected && { backgroundColor: '#B0E0E6', borderRadius: 100 },
+        // ]}
       >
         <View
           style={[
             { borderRadius: 100, backgroundColor: '#fff' },
-            selected && { borderColor: '#007AFF', borderWidth: 2 },
+            selected && { borderColor: '#007AFF', borderWidth: 2, width: 53 },
           ]}
         >
           <Text
             style={[
-              { fontSize: 30, padding: 10 },
+              { fontSize: 30, padding: 5 },
               selected && { color: '#007AFF' },
             ]}
           >

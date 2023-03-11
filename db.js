@@ -31,7 +31,7 @@ export function SaveAnswers(questionId, answer, remark) {
         `INSERT INTO answers (questionId, answer, dateAnswered, dateAnsweredISO, remark, timestamp) VALUES (?, ?, ?, ?, ?, ?);`,
         [questionId, answer, dateAnswered, dateAnsweredISO, remark, timestamp],
         (_, result) => {
-          console.log('Answer stored');
+          console.log(questionId);
           resolve(result);
         },
         (_, error) => {
@@ -64,6 +64,23 @@ export function isAnswered(questionId) {
      );
    });
  });
+}
+
+export function gDPR(questionId) {
+  const sqlQuery = "SELECT COUNT(*) AS count FROM answers WHERE questionId = ?";
+  const params = [questionId];
+  
+  return new Promise((resolve, reject) => {
+    db.transaction(tx => {
+      tx.executeSql(sqlQuery, params, (_, { rows }) => {
+        const count = rows.item(0).count;
+        resolve(count > 0);
+      }, (_, error) => {
+        console.log('Error checking if GDPR is answered:', error);
+        reject(error);
+      });
+    });
+  });
 }
 
 export async function getAnswers() {

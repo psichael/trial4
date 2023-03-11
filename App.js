@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, KeyboardAvoidingView, Image} from 'react-native';
+import { StyleSheet, Text, View, KeyboardAvoidingView, Image, TouchableOpacity, Button} from 'react-native';
 import { getNextQuestion } from './question_controller';
-import { SaveAnswers } from './db';
+import { SaveAnswers, gDPR } from './db';
 import * as Notifications from 'expo-notifications';
 
 import EmojiQuestion from './emoji_q';
 import OpenQuestion from './open_q';
 import RadioQuestion from './radio_q';
 import ShareAnswers from './share_answers';
+
+// startup screen
+
+
+
 
 
 
@@ -29,17 +34,29 @@ switch (question.answerType) {
 
 export default function App() {
  const [question, setQuestion] = useState(null);
+ const [shouldRender, setShouldRender] = useState(false);
  
-  const handleGetNextQuestion = async () => {
- const nextQuestion = await getNextQuestion();
- setQuestion(nextQuestion);
- };
+ const handleGetNextQuestion = async () => {
+  // Check if GDPR question has been answered
+  const gdprAnswered = await gDPR(9999);
+  console.log (gdprAnswered);
+
+  if (!gdprAnswered) {
+    // If GDPR question hasn't been answered, render the GDPR component
+    setShouldRender(true);
+  } else {
+    // If GDPR question has been answered, fetch the next question
+    const nextQuestion = await getNextQuestion();
+    setQuestion(nextQuestion);
+  }
+};
+ 
   
  const handleSaveAnswer = async (questionId, answer, remark) => {
   
     await SaveAnswers(questionId, answer, remark);    
- 
-  await handleGetNextQuestion();
+    
+    await handleGetNextQuestion();
 };
 
 
@@ -92,17 +109,92 @@ export default function App() {
   scheduleNotifications();
 }, []);
 
+if (shouldRender) {
+  // render the GDPR component if question is null
+  return <GDPR onSaveAnswer={handleSaveAnswer} />;
+}
  
+function GDPR({ question, onSaveAnswer }) {
+  const [answer, setAnswer] = useState(null);
+    
+  const handlePress = async (option) => {
+    setAnswer(option);
+    
+  };
+
+  const handleSave = async () => {
+    if (answer === 'Yes') {
+      await onSaveAnswer(9999, answer);
+      setShouldRender(false); 
+      handleGetNextQuestion();
+    }
+  };
+
+
+  return (
+    <View style={styles.container}>
+      <Text>
+         Welcome our research app. This app will collect your answers to questions about your wellbeing during your journey. At the end of the survey, you can send the answers to us by email. Your questions will then be anonymized before processing and the email with your answers deleted. Do you agree to collaborate with our research? ',
+      </Text>
+      
+      <RadioOption
+        
+        option='Yes'
+        onPress={handlePress}
+        selected={answer === 'Yes'}
+        label="Yes"
+        />
+         
+      <View style={{padding: 30} }>
+        <Button title="Let's get started!" onPress={handleSave} style={{Color: '#007AFF'}} />
+      </View>
+      
+    </View>
+  );
+}
+
+function RadioOption({ option, onPress, selected, label }) {
+  return (
+    <TouchableOpacity onPress={() => onPress(option)}>
+
+        
+      <View
+        style={[
+          { borderRadius: 100, backgroundColor: '#fff' },
+          selected && { borderColor: '#007AFF', borderWidth: 2 },
+        ]}
+      >
+        <Text
+          style={[
+            { fontSize: 20, padding: 10 },
+            selected && { color: '#007AFF' },
+          ]}
+        >
+          {label || option}
+        </Text>
+      </View>
+        
+
+    </TouchableOpacity>
+  );
+}
+
+
+
 return (
   <KeyboardAvoidingView style={styles.container} behavior="height">
+    <RadioOption onSaveAnswer={handleSaveAnswer} style={styles.question} />
+  
+  
+    
       <View style={styles.logoContainer}>
         <Image source={require('./assets/logo.svg')} style={styles.logo} />
       </View>
-      {question && question.questionId !== 0 ? (
+      {question && question.questionId !== 0 ?(
         <View style={[styles.questionContainer, { zIndex: 1 }]}>
           <QuestionView question ={question} onSaveAnswer={handleSaveAnswer} style={styles.question} />
     </View>
-  ) : (
+    ) : (
     <>
       <View style={[styles.noQuestionContainer, { zIndex: 1 }]}>
         <Text style={styles.noQuestionText}>No more questions</Text>
@@ -112,7 +204,9 @@ return (
       </View>
     </>
   )}
-</KeyboardAvoidingView>
+  </KeyboardAvoidingView>
+
+  
 );
 };
 
