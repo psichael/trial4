@@ -15,15 +15,15 @@ function OpenQuestion({ question, onSaveAnswer}) {
 
   return (
     <View>
-      <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 30, color: '#007AFF'  }}>{question.questionText}</Text>
+      <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 30, color: '#1d71b8'  }}>{question.questionText}</Text>
       <TextInput
-        style={{ height: 40, borderColor: '#007AFF', borderWidth: 1 }}
+        style={{ height: 40, borderColor: '#1d71b8', borderWidth: 1 }}
         onChangeText={handleTextChange}
         value={answer}
         onSubmitEditing={handleSave}
       />
       <View style={{padding:30}}> 
-        <Button title="Next question" onPress={handleSave} />
+        <Button title="Next question" onPress={handleSave} color="#1d71b8" />
       </View>
       
     </View>

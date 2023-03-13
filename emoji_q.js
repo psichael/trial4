@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity} from 'react-native';
+import { Text, View, TextInput, Button, TouchableOpacity} from 'react-native';
 import { KeyboardAvoidingView } from 'react-native';
 
-const getSmileyTextValue = (smiley) => {
-  switch (smiley) {
-    case "😭":
+const getEmojiTextValue = (emoji) => {
+  switch (emoji) {
+    case "DE1E":
       return "Very sad";
-    case "🙁":
+    case "DE41":
       return "Sad";
-    case "😐":
+    case "DE10":
       return "Neutral";
-    case "🙂":
+    case "DE42":
       return "Happy";
-    case "😀":
+    case "DE03":
       return "Very happy";
     default:
       return "";
@@ -20,12 +20,14 @@ const getSmileyTextValue = (smiley) => {
 };
 
 function EmojiQuestion({ question, onSaveAnswer }) {
-  const [answer, setAnswer] = useState(null);
+  const [answer, setAnswer] = useState('');
   const [remark, setRemark] = useState('');
+  const [emoji, setEmoji] = useState('');
 
-  const handlePress = async (option) => {
+  const handleEmojiPress = (option) => {
+    const emoji = option.charCodeAt(1).toString(16).toUpperCase();
+    setEmoji(emoji);
     setAnswer(option);
-    
   };
 
   const handleTextChange = (text) => {
@@ -33,70 +35,70 @@ function EmojiQuestion({ question, onSaveAnswer }) {
   };
 
   const handleSave = async () => {
-    await onSaveAnswer(question.questionId, getSmileyTextValue(answer), remark);
+    await onSaveAnswer(question.questionId, getEmojiTextValue(emoji), remark);
+    console.log('handleSave: ', getEmojiTextValue(emoji));
   };
 
   return (
     <View>
-      <KeyboardAvoidingView behavior="position">
-        <Text style={{ fontSize: 20, fontWeight: 'bold', padding: 10, color: '#007AFF' }}>{question.questionText}</Text>
+      <KeyboardAvoidingView behavior="position" contentContainerStyle={{ paddingBottom: 60 }}>
+        <Text style={{ fontSize: 20, fontWeight: 'bold', padding: 10, color: '#1d71b8' }}>{question.questionText}</Text>
         {question.answerType === 'smilies' &&
           question.radioOptions.map((option) => (
             <SmileyOption
               key={option}
               option={option}
-              onPress={handlePress}
+              onPress={handleEmojiPress}
               selected={answer === option}
-              />
+              onSubmitEditing={handleSave}
+            />
           ))}
-        
-        
+
         <View style={{marginTop:20}}>
-          
-            <Text>Remark:</Text>
-              <TextInput
-                placeholder= "Only if you feel the need" 
-                style={{ height: 40, borderColor: '#007AFF', borderWidth: 1, marginBottom: 10, padding: 10, borderRadius: 5}}
-                value={remark}
-                onChangeText={handleTextChange}
-                onSubmitEditing={handleTextChange}
-              />
-          
-          
+
+          <Text>Remark:</Text>
+          <TextInput
+            placeholder="Only if you feel the need"
+            style={{ height: 40, borderColor: '#1d71b8', borderWidth: 1, marginBottom: 10, padding: 10, borderRadius: 5 }}
+            value={remark}
+            onChangeText={handleTextChange}
+            onSubmitEditing={handleSave}
+          />
+
+
         </View>
         <View style={{padding: 30}}>
-          <Button title="Next question" onPress={handleSave} />
-        </View>      
+          <Button title="Next question" onPress={handleSave} color="#1d71b8"/>
+        </View>
       </KeyboardAvoidingView>
     </View>
   );
 }
 
+
 function SmileyOption({ option, onPress, selected }) {
+  const emoji = option.charCodeAt(1).toString(16).toUpperCase();
+  const textValue = getEmojiTextValue(emoji);
+  
   return (
     <TouchableOpacity onPress={() => onPress(option)}>
-      <View
-        // style={[
-        //   {  flexDirection: 'row', alignItems: 'center' },
-        //   selected && { backgroundColor: '#B0E0E6', borderRadius: 100 },
-        // ]}
-      >
+      <View>
         <View
           style={[
-            { borderRadius: 100, backgroundColor: '#fff' },
-            selected && { borderColor: '#007AFF', borderWidth: 2, width: 53 },
+            { borderRadius: 100, backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10 },
+            selected && { borderColor: '#1d71b8', borderWidth: 2, width: 150 },
           ]}
         >
           <Text
             style={[
               { fontSize: 30, padding: 5 },
-              selected && { color: '#007AFF' },
+              selected && { color: '#1d71b8' },
             ]}
           >
-            {option.substring(0, 2)}
+            {option}
           </Text>
+          <Text style={{ fontSize: 14 }}>{textValue}</Text>
         </View>
-        <Text style={{ fontSize: 14 }}>{option.substring(2)}</Text>
       </View>
     </TouchableOpacity>
   );

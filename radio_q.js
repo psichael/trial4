@@ -18,7 +18,7 @@ function RadioQuestion({ question, onSaveAnswer }) {
 
   return (
     <View>
-      <Text style={{ fontSize: 20, fontWeight: 'bold', padding: 10, color: '#007AFF' }}>{question.questionText}</Text>
+      <Text style={{ fontSize: 20, fontWeight: 'bold', padding: 10, color: '#1d71b8' }}>{question.questionText}</Text>
       {question.radioOptions.map((option) => (
           <RadioOption
             key={option}
@@ -28,7 +28,7 @@ function RadioQuestion({ question, onSaveAnswer }) {
             />
         ))}
       <View style={{padding: 30} }>
-        <Button title="Next question" onPress={handleSave} style={{Color: '#007AFF'}} />
+        <Button title="Next question" onPress={handleSave} color="#1d71b8" />
       </View>
       
     </View>
@@ -43,13 +43,13 @@ function RadioOption({ option, onPress, selected }) {
       <View
         style={[
           { borderRadius: 100, backgroundColor: '#fff' },
-          selected && { borderColor: '#007AFF', borderWidth: 2 },
+          selected && { borderColor: '#1d71b8', borderWidth: 2 },
         ]}
       >
         <Text
           style={[
             { fontSize: 20, padding: 10 },
-            selected && { color: '#007AFF' },
+            selected && { color: '#1d71b8' },
           ]}
         >
           {option.substring(0, 500)}
