@@ -83,7 +83,7 @@ const handleSaveAnswer = async (questionId, answer, remark) => {
   
       const now = new Date();
       if (now >= startDate && now <= endDate) {
-        const trigger = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 15, 59); // schedule notification at 1pm
+        const trigger = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 0);
   
         const scheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
         if (scheduledNotifications) {

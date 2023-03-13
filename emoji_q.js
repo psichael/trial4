@@ -35,8 +35,7 @@ function EmojiQuestion({ question, onSaveAnswer }) {
   };
 
   const handleSave = async () => {
-    await onSaveAnswer(question.questionId, getEmojiTextValue(emoji), remark);
-    console.log('handleSave: ', getEmojiTextValue(emoji));
+    await onSaveAnswer(question.questionId, getEmojiTextValue(emoji), remark);    
   };
 
   return (

@@ -5,7 +5,7 @@ const db = SQLite.openDatabase('db.db');
 
 
 db.transaction(tx => {
- tx.executeSql('DROP TABLE IF EXISTS answers;');
+//  tx.executeSql('DROP TABLE IF EXISTS answers;');
  tx.executeSql(`
    CREATE TABLE IF NOT EXISTS answers (
      questionId INTEGER,
@@ -22,7 +22,7 @@ export function SaveAnswers(questionId, answer, remark) {
  const timestamp = new Date().getTime();
  const dateAnswered = new Date().toLocaleString();
  const dateAnsweredISO = new Date(timestamp).toISOString().slice(0, 10);
-  // const dateAnsweredISO = "5";
+//  const dateAnsweredISO = "4";
   
  return new Promise((resolve, reject) => {
    db.transaction(
@@ -30,8 +30,7 @@ export function SaveAnswers(questionId, answer, remark) {
       tx.executeSql(
         `INSERT INTO answers (questionId, answer, dateAnswered, dateAnsweredISO, remark, timestamp) VALUES (?, ?, ?, ?, ?, ?);`,
         [questionId, answer, dateAnswered, dateAnsweredISO, remark, timestamp],
-        (_, result) => {
-          console.log('Answer stored:', { questionId, answer, dateAnswered, dateAnsweredISO, remark, timestamp });     
+        (_, result) => {         
           resolve(result);          
         },      
         (_, error) => {
@@ -47,7 +46,7 @@ export function SaveAnswers(questionId, answer, remark) {
 
 export function isAnswered(questionId) {
   const today = new Date().toISOString().slice(0, 10);
-  // const today = "5";
+  // const today = "4";
  return new Promise((resolve, reject) => {
    db.transaction(tx => {
      tx.executeSql(
