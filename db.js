@@ -5,7 +5,7 @@ const db = SQLite.openDatabase('db.db');
 
 
 db.transaction(tx => {
-//  tx.executeSql('DROP TABLE IF EXISTS answers;');
+ tx.executeSql('DROP TABLE IF EXISTS answers;');
  tx.executeSql(`
    CREATE TABLE IF NOT EXISTS answers (
      questionId INTEGER,

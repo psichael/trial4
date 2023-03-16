@@ -50,7 +50,7 @@ export default function App() {
     
     if (nextQuestion) {
       setQuestion(nextQuestion);
-      return false;
+     return false;
     } else {
       return true;
     }
@@ -60,7 +60,7 @@ export default function App() {
 const handleSaveAnswer = async (questionId, answer, remark) => {
   if (answer) {
     await SaveAnswers(questionId, answer, remark);
-    await handleGetNextQuestion();    
+    const nextQuestion = await handleGetNextQuestion();   
   }
 };
 
@@ -68,7 +68,7 @@ const handleSaveAnswer = async (questionId, answer, remark) => {
 useEffect(() => {
   const scheduleNotifications = async () => {
     try {
-      // Schedule daily notifications at noon between the start and end dates
+      
       const startDate = new Date('2023-03-01');
       const endDate = new Date('2023-03-31');
       const now = new Date();
@@ -79,44 +79,43 @@ useEffect(() => {
 
         for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
           const notificationId = `notification_${date.toISOString()}`;
+          const trigger = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 9, 0);
 
           // Check if the notification has already been scheduled for the day
           const alreadyScheduled = scheduledNotificationIds.includes(notificationId);
+          console.log('already',alreadyScheduled);
 
           // Get the next question to check if it is the last one for the day
-          const nextQuestion = await handleGetNextQuestion();
+          const nextQuestion = await handleGetNextQuestion();          
 
-          // Check if there are no more questions to answer for the current day
-          const noMoreQuestions = !nextQuestion && date.toDateString() === now.toDateString();
-
-          // Schedule a notification for the day, except for today if there are no more questions to answer
-          if ((!alreadyScheduled || (noMoreQuestions && !nextQuestion))) {
+          
+          if (!alreadyScheduled) {
             await Notifications.scheduleNotificationAsync({
               content: {
                 title: 'Reminder',
                 body: 'Hi, there are new questions waiting for your answer!',
               },
-              trigger: {
-                hour: 12,
-                minute: 0,
-                repeats: true,
-              },
+              trigger,
               identifier: notificationId,
             });
+            console.log(notificationId);
           }
           // Check if the user has answered all questions for the day and remove the notification
-          if (alreadyScheduled && noMoreQuestions) {
+          if (date.toDateString() == now.toDateString() && alreadyScheduled && !nextQuestion) {
             await Notifications.cancelScheduledNotificationAsync(notificationId);
+            console.log('today has been canceled');
           }
         }
       }
     } catch (error) {
       console.log('Error scheduling notification:', error);
     }
+    console.log('useEffect called');
   };
 
   scheduleNotifications();
-});
+}, []);
+
 
 
 useEffect(() => {
