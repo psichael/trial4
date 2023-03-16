@@ -9,11 +9,6 @@ import OpenQuestion from './open_q';
 import RadioQuestion from './radio_q';
 import ShareAnswers from './share_answers';
 
-// startup screen
-
-
-
-
 
 
 function QuestionView({ question, onSaveAnswer }) {
@@ -32,6 +27,10 @@ switch (question.answerType) {
 }
 }
 
+
+
+
+
 export default function App() {
  const [question, setQuestion] = useState(null);
  const [shouldRender, setShouldRender] = useState(false);
@@ -39,21 +38,25 @@ export default function App() {
  const handleGetNextQuestion = async () => {
   // Check if GDPR question has been answered
   const gdprAnswered = await gDPR(9999);
-  
+   
   if (!gdprAnswered) {
     // If GDPR question hasn't been answered, render the GDPR component
     setShouldRender(true);
     
   } else {
     // If GDPR question has been answered, fetch the next question
-    setShouldRender(false);    
+    setShouldRender(false);
     const nextQuestion = await getNextQuestion();
-    setQuestion(nextQuestion);
     
+    if (nextQuestion) {
+      setQuestion(nextQuestion);
+      return false;
+    } else {
+      return true;
+    }
   }
 };
- 
-  
+
 const handleSaveAnswer = async (questionId, answer, remark) => {
   if (answer) {
     await SaveAnswers(questionId, answer, remark);
@@ -62,44 +65,48 @@ const handleSaveAnswer = async (questionId, answer, remark) => {
 };
 
 
- useEffect(() => {
- handleGetNextQuestion();
- }, []);
-  
- useEffect(() => {
+useEffect(() => {
   const scheduleNotifications = async () => {
     try {
-      // Get the next question to check if it is the last one for the day
-      const nextQuestion = await getNextQuestion();
-  
-      if (!nextQuestion || nextQuestion.questionId === 0) {
-        // No more questions for today, so don't schedule a notification
-        return;
-      }
-  
-      // Schedule daily notifications at 1pm between the start and end dates
+      // Schedule daily notifications at noon between the start and end dates
       const startDate = new Date('2023-03-01');
       const endDate = new Date('2023-03-31');
-  
       const now = new Date();
+
       if (now >= startDate && now <= endDate) {
-        const trigger = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 12, 0);
-  
         const scheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
-        if (scheduledNotifications) {
-          const alreadyScheduled = scheduledNotifications.some(
-            (notification) => notification.identifier === 'my_notification_id'
-          );
-  
-          if (!alreadyScheduled) {
+        const scheduledNotificationIds = scheduledNotifications.map((notification) => notification.identifier);
+
+        for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+          const notificationId = `notification_${date.toISOString()}`;
+
+          // Check if the notification has already been scheduled for the day
+          const alreadyScheduled = scheduledNotificationIds.includes(notificationId);
+
+          // Get the next question to check if it is the last one for the day
+          const nextQuestion = await handleGetNextQuestion();
+
+          // Check if there are no more questions to answer for the current day
+          const noMoreQuestions = !nextQuestion && date.toDateString() === now.toDateString();
+
+          // Schedule a notification for the day, except for today if there are no more questions to answer
+          if ((!alreadyScheduled || (noMoreQuestions && !nextQuestion))) {
             await Notifications.scheduleNotificationAsync({
               content: {
                 title: 'Reminder',
                 body: 'Hi, there are new questions waiting for your answer!',
               },
-              trigger,
-              identifier: 'my_notification_id',
+              trigger: {
+                hour: 12,
+                minute: 0,
+                repeats: true,
+              },
+              identifier: notificationId,
             });
+          }
+          // Check if the user has answered all questions for the day and remove the notification
+          if (alreadyScheduled && noMoreQuestions) {
+            await Notifications.cancelScheduledNotificationAsync(notificationId);
           }
         }
       }
@@ -107,18 +114,22 @@ const handleSaveAnswer = async (questionId, answer, remark) => {
       console.log('Error scheduling notification:', error);
     }
   };
-  
+
   scheduleNotifications();
+});
+
+
+useEffect(() => {
+  handleGetNextQuestion();
 }, []);
 
 if (shouldRender) {
-  // render the GDPR component if question is null
   return <GDPR onSaveAnswer={handleSaveAnswer} />;
 }
  
 function GDPR({ onSaveAnswer }) {
   const [isChecked, setIsChecked] = useState(false);
-
+  
   const handleSave = async () => {
     if (isChecked) {
       await onSaveAnswer(9999, 'Yes');
