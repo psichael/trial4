@@ -34,10 +34,10 @@ switch (question.answerType) {
 export default function App() {
  const [question, setQuestion] = useState(null);
  const [shouldRender, setShouldRender] = useState(false);
+
  
  const handleGetNextQuestion = async () => {
-  // Check if GDPR question has been answered
-  const gdprAnswered = await gDPR(9999);
+ const gdprAnswered = await gDPR(9999);  
    
   if (!gdprAnswered) {
     // If GDPR question hasn't been answered, render the GDPR component
@@ -58,7 +58,7 @@ export default function App() {
 };
 
 const handleSaveAnswer = async (questionId, answer, remark) => {
-  if (answer) {
+  if (answer || questionId == 31) {
     await SaveAnswers(questionId, answer, remark);
     const nextQuestion = await handleGetNextQuestion();   
   }
@@ -66,20 +66,25 @@ const handleSaveAnswer = async (questionId, answer, remark) => {
 
 
 useEffect(() => {
+  const cleanupNotifications = async () => {
+    await Notifications.cancelAllScheduledNotificationsAsync();
+  };
+
+  cleanupNotifications();
+
   const scheduleNotifications = async () => {
     try {
       
-      const startDate = new Date('2023-03-01');
       const endDate = new Date('2023-03-31');
       const now = new Date();
 
-      if (now >= startDate && now <= endDate) {
+      if (now <= endDate) {
         const scheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
         const scheduledNotificationIds = scheduledNotifications.map((notification) => notification.identifier);
 
-        for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+        for (let date = new Date(); date <= endDate; date.setDate(date.getDate() + 1)) {          
           const notificationId = `notification_${date.toISOString()}`;
-          const trigger = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 9, 0);
+          const trigger = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 17, 15);
 
           // Check if the notification has already been scheduled for the day
           const alreadyScheduled = scheduledNotificationIds.includes(notificationId);
@@ -97,6 +102,13 @@ useEffect(() => {
               },
               trigger,
               identifier: notificationId,
+              android: {
+                channelId: 'reminders',
+                color: '#4e7d8a',
+                icon: 'ic_launcher',
+                foreground: true,
+                android_foreground: 'always', 
+              },          
             });
             console.log(notificationId);
           }
@@ -110,7 +122,6 @@ useEffect(() => {
     } catch (error) {
       console.log('Error scheduling notification:', error);
     }
-    console.log('useEffect called');
   };
 
   scheduleNotifications();
@@ -224,15 +235,17 @@ const styles = StyleSheet.create({
   questionContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    
+    alignItems: 'flex-start',
+    width: '80%',   
   },
   question: {
     color: COLORS.PRIMARY,
+    flex: 1,
     padding: 10,
     fontSize: 24,
     borderWidth: 5,
-    borderColor: '#1d71b8'
+    borderColor: '#1d71b8',
+    alignItems: 'flex-start',
   },
   noQuestionContainer: {
     flex: 1,
