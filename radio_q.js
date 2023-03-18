@@ -18,7 +18,7 @@ function RadioQuestion({ question, onSaveAnswer }) {
 
   return (
     <View>
-      <Text style={{ fontSize: 20, fontWeight: 'bold', padding: 10, color: '#1d71b8' }}>{question.questionText}</Text>
+       <Text style={{ fontSize: 20, padding: 10, color: '#1d71b8' }}>{question.questionText}{question.boldText && <Text style={{ fontWeight: 'bold' }}>{question.boldText}</Text>}</Text>
       {question.radioOptions.map((option) => (
           <RadioOption
             key={option}
