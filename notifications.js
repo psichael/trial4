@@ -36,28 +36,21 @@ export async function schedulePushNotification(
     type,
     time,
     day,
-    notificationTimeInSeconds // the time of day in seconds
-  ) {
-
-    await Notifications.cancelAllScheduledNotificationsAsync();
-    
-    const startDate = new Date('2023-03-19T00:00:00'); // start date is March 19
-    const endDate = new Date('2023-03-21T00:00:00'); // end date is March 21
+    notificationTimeInSeconds, // the time of day in seconds
+    startDate // the start date for the notification schedule
+ ) {
+    const endDate = new Date('2023-03-25T00:00:00'); // end date is March 21
     const currentTime = new Date();
-  
-    // Calculate the timestamp for the specified time of day
+     // Calculate the timestamp for the specified time of day
     const timestamp = new Date();
     timestamp.setHours(0, 0, notificationTimeInSeconds, 0);
-  
-    // Schedule notifications for each day between start and end dates
+     // Schedule notifications for each day between start and end dates
     for (let date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
       const notificationDate = new Date(date);
       notificationDate.setHours(timestamp.getHours(), timestamp.getMinutes(), timestamp.getSeconds(), 0);
-  
-      // Calculate the delay until the next notification
+       // Calculate the delay until the next notification
       const delay = notificationDate.getTime() - currentTime.getTime();
-  
-      if (delay > 0) {
+       if (delay > 0) {
         // Schedule the notification
         const id = await Notifications.scheduleNotificationAsync({
           content: {
@@ -70,8 +63,7 @@ export async function schedulePushNotification(
           startDate: startDate,
           endDate: endDate,
         });
-  
-        console.log('Notification scheduled for:', notificationDate);
+         console.log('Notification scheduled for:', notificationDate);
       }
     }
   }

@@ -46,7 +46,7 @@ export default function App() {
 
  
  const handleGetNextQuestion = async () => {
- const gdprAnswered = await gDPR(9999);  
+  const gdprAnswered = await gDPR(9999);  
    
   if (!gdprAnswered) {
     // If GDPR question hasn't been answered, render the GDPR component
@@ -59,15 +59,17 @@ export default function App() {
     
     if (nextQuestion) {
       setQuestion(nextQuestion);
-     return false;
-    } else {
-      const today = new Date();
-      const notificationId = `notification_${today.toISOString()}`;
-      await Notifications.cancelScheduledNotificationAsync(notificationId);
-      return true;
-    }
-  }
-};
+      // return false;    
+  };
+  if (nextQuestion.questionId === 0) {
+    const today = new Date();
+  const notificationId = `notification_${today.toISOString().slice(0, 10)}`;
+  await Notifications.cancelScheduledNotificationAsync(notificationId);
+    console.log('HGNQ has canceled');
+    return true;
+   }
+};;
+ }
 
 const handleSaveAnswer = async (questionId, answer, remark) => {
   if (answer || questionId == 31) {
@@ -77,24 +79,46 @@ const handleSaveAnswer = async (questionId, answer, remark) => {
 };
 
 
-hours = 18;
-minutes = 44;
+hours = 22;
+minutes = 28;
 seconds_after_midnight = hours * 3600 + minutes * 60
 print(seconds_after_midnight)
 
-useEffect(() => {   
-  const startDate = new Date('2023-03-19T00:00:00'); // start date is March 19
-  const endDate = new Date('2023-03-21T00:00:00'); // end date is March 21
-  const notificationTimeInSeconds = seconds_after_midnight; 
-  schedulePushNotification('', '', '', '', '', notificationTimeInSeconds); // schedule the notification for each day between start and end dates
+const scheduleNotifications = async () => {
 
 
+const startDate = new Date('2023-03-18T00:00:00');
+const endDate = new Date('2023-03-21T00:00:00');
+const notificationTimeInSeconds = seconds_after_midnight;
+
+if (question == null || question.questionId) {
+
+  console.log('if', question);    
+  schedulePushNotification('', '', '', '', '', notificationTimeInSeconds, startDate, endDate);
+  } else {
+    const tomorrow = new Date();
+     tomorrow.setDate(tomorrow.getDate() + 1);    
+    const today = new Date();    
+     schedulePushNotification('', '', '', '', '', notificationTimeInSeconds, tomorrow, endDate);
+    const notificationId = `notification_${today.toISOString()}`;
+    await Notifications.cancelScheduledNotificationAsync(notificationId);
+    console.log('else', question);
+  }
+}
+
+useEffect(() => {
+  Notifications.cancelAllScheduledNotificationsAsync();
+  scheduleNotifications();
 }, []);
 
 
 
+
+  
+
 useEffect(() => {
   handleGetNextQuestion();
+  console.log('handleGetNextQuestion');
 }, []);
 
 if (shouldRender) {
