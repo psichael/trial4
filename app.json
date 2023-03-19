@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "trial4",
-    "slug": "trial4",
+    "name": "Cadet Wellbeing",
+    "slug": "Cadet Wellbeing",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,7 +22,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.psichael.trial4"
+      "package": "com.psichael.cadetWellbeing"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -34,3 +34,4 @@
     }
   }
 }
+

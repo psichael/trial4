@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { StyleSheet, Text, View, KeyboardAvoidingView, Image, TouchableOpacity, Button, Switch} from 'react-native';
 import { getNextQuestion } from './question_controller';
 import { SaveAnswers, gDPR } from './db';
@@ -8,6 +8,8 @@ import EmojiQuestion from './emoji_q';
 import OpenQuestion from './open_q';
 import RadioQuestion from './radio_q';
 import ShareAnswers from './share_answers';
+import Notification, { schedulePushNotification } from './notifications';
+
 
 
 
@@ -27,6 +29,13 @@ switch (question.answerType) {
 }
 }
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
 
 
 
@@ -52,6 +61,9 @@ export default function App() {
       setQuestion(nextQuestion);
      return false;
     } else {
+      const today = new Date();
+      const notificationId = `notification_${today.toISOString()}`;
+      await Notifications.cancelScheduledNotificationAsync(notificationId);
       return true;
     }
   }
@@ -65,66 +77,18 @@ const handleSaveAnswer = async (questionId, answer, remark) => {
 };
 
 
-useEffect(() => {
-  const cleanupNotifications = async () => {
-    await Notifications.cancelAllScheduledNotificationsAsync();
-  };
+hours = 18;
+minutes = 44;
+seconds_after_midnight = hours * 3600 + minutes * 60
+print(seconds_after_midnight)
 
-  cleanupNotifications();
+useEffect(() => {   
+  const startDate = new Date('2023-03-19T00:00:00'); // start date is March 19
+  const endDate = new Date('2023-03-21T00:00:00'); // end date is March 21
+  const notificationTimeInSeconds = seconds_after_midnight; 
+  schedulePushNotification('', '', '', '', '', notificationTimeInSeconds); // schedule the notification for each day between start and end dates
 
-  const scheduleNotifications = async () => {
-    try {
-      
-      const endDate = new Date('2023-03-31');
-      const now = new Date();
 
-      if (now <= endDate) {
-        const scheduledNotifications = await Notifications.getAllScheduledNotificationsAsync();
-        const scheduledNotificationIds = scheduledNotifications.map((notification) => notification.identifier);
-
-        for (let date = new Date(); date <= endDate; date.setDate(date.getDate() + 1)) {          
-          const notificationId = `notification_${date.toISOString()}`;
-          const trigger = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 17, 15);
-
-          // Check if the notification has already been scheduled for the day
-          const alreadyScheduled = scheduledNotificationIds.includes(notificationId);
-          console.log('already',alreadyScheduled);
-
-          // Get the next question to check if it is the last one for the day
-          const nextQuestion = await handleGetNextQuestion();          
-
-          
-          if (!alreadyScheduled) {
-            await Notifications.scheduleNotificationAsync({
-              content: {
-                title: 'Reminder',
-                body: 'Hi, there are new questions waiting for your answer!',
-              },
-              trigger,
-              identifier: notificationId,
-              android: {
-                channelId: 'reminders',
-                color: '#4e7d8a',
-                icon: 'ic_launcher',
-                foreground: true,
-                android_foreground: 'always', 
-              },          
-            });
-            console.log(notificationId);
-          }
-          // Check if the user has answered all questions for the day and remove the notification
-          if (date.toDateString() == now.toDateString() && alreadyScheduled && !nextQuestion) {
-            await Notifications.cancelScheduledNotificationAsync(notificationId);
-            console.log('today has been canceled');
-          }
-        }
-      }
-    } catch (error) {
-      console.log('Error scheduling notification:', error);
-    }
-  };
-
-  scheduleNotifications();
 }, []);
 
 
@@ -195,6 +159,7 @@ return (
         </View>
       </>
     )}
+     <Notification />
   </KeyboardAvoidingView>
 );
 };

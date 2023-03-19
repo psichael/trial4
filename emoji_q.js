@@ -96,7 +96,7 @@ function SmileyOption({ option, onPress, selected }) {
           >
             {option}
           </Text>
-          <Text style={{ fontSize: 14 }}>{textValue}</Text>
+          
         </View>
       </View>
     </TouchableOpacity>
