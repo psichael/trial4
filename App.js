@@ -56,11 +56,11 @@ export default function App() {
   // console.log('id',idToday);
 }
 
-useEffect(() => {
-  Notifications.cancelAllScheduledNotificationsAsync();
-  scheduleNotifications();
-  logNotificationIdsForToday(); // calling the function here
-}, []); 
+// useEffect(() => {
+//   Notifications.cancelAllScheduledNotificationsAsync();
+//   // scheduleNotifications();
+//   logNotificationIdsForToday(); // calling the function here
+// }, []); 
 
  const handleGetNextQuestion = async () => {
   const gdprAnswered = await gDPR(9999); 
@@ -94,8 +94,8 @@ const handleSaveAnswer = async (questionId, answer, remark) => {
 };
 
 
-hours = 1;
-minutes = 45;
+hours = 2;
+minutes = 37;
 seconds_after_midnight = hours * 3600 + minutes * 60
 print(seconds_after_midnight)
 
@@ -122,7 +122,8 @@ if (question == null || question.questionId) {
 
 useEffect(() => {
   Notifications.cancelAllScheduledNotificationsAsync();
-  // scheduleNotifications();
+  scheduleNotifications();
+  logNotificationIdsForToday();
 }, []);
 
 
