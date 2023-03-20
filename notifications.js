@@ -63,7 +63,7 @@ export async function schedulePushNotification(
           startDate: startDate,
           endDate: endDate,
         });
-         console.log('Notification scheduled for:', notificationDate);
+         console.log('Notification scheduled for:', notificationDate, id);
       }
     }
   }

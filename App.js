@@ -8,7 +8,7 @@ import EmojiQuestion from './emoji_q';
 import OpenQuestion from './open_q';
 import RadioQuestion from './radio_q';
 import ShareAnswers from './share_answers';
-import Notification, { schedulePushNotification } from './notifications';
+import Notification, { schedulePushNotification, schedulePushNotificationForToday } from './notifications';
 
 
 
@@ -39,37 +39,52 @@ Notifications.setNotificationHandler({
 
 
 
-
 export default function App() {
  const [question, setQuestion] = useState(null);
  const [shouldRender, setShouldRender] = useState(false);
+ const [scheduledNotificationId, setScheduledNotificationId] = useState(null);
 
- 
+
+ const logNotificationIdsForToday = async () => {
+  const notifications = await Notifications.getAllScheduledNotificationsAsync();
+  // console.log('all notifications??', notifications);
+  
+  
+  notifications.sort((a, b) => a.trigger.seconds - b.trigger.seconds);
+  const idToday = notifications[0]?.identifier;
+  setScheduledNotificationId(idToday);
+  // console.log('id',idToday);
+}
+
+useEffect(() => {
+  Notifications.cancelAllScheduledNotificationsAsync();
+  scheduleNotifications();
+  logNotificationIdsForToday(); // calling the function here
+}, []); 
+
  const handleGetNextQuestion = async () => {
-  const gdprAnswered = await gDPR(9999);  
-   
+  const gdprAnswered = await gDPR(9999); 
+ 
   if (!gdprAnswered) {
     // If GDPR question hasn't been answered, render the GDPR component
     setShouldRender(true);
-    
+  
   } else {
     // If GDPR question has been answered, fetch the next question
     setShouldRender(false);
     const nextQuestion = await getNextQuestion();
-    
+  
     if (nextQuestion) {
       setQuestion(nextQuestion);
-      // return false;    
-  };
-  if (nextQuestion.questionId === 0) {
-    const today = new Date();
-  const notificationId = `notification_${today.toISOString().slice(0, 10)}`;
-  await Notifications.cancelScheduledNotificationAsync(notificationId);
-    console.log('HGNQ has canceled');
-    return true;
-   }
-};;
- }
+    }
+    if (nextQuestion.questionId === 0 && scheduledNotificationId != null) {
+      console.log('Cancelling scheduled notification:', scheduledNotificationId);
+      // If there are no more questions, cancel the scheduled notification
+      await Notifications.cancelScheduledNotificationAsync(scheduledNotificationId);
+  }
+  }
+};
+
 
 const handleSaveAnswer = async (questionId, answer, remark) => {
   if (answer || questionId == 31) {
@@ -79,8 +94,8 @@ const handleSaveAnswer = async (questionId, answer, remark) => {
 };
 
 
-hours = 22;
-minutes = 28;
+hours = 1;
+minutes = 45;
 seconds_after_midnight = hours * 3600 + minutes * 60
 print(seconds_after_midnight)
 
@@ -92,8 +107,7 @@ const endDate = new Date('2023-03-21T00:00:00');
 const notificationTimeInSeconds = seconds_after_midnight;
 
 if (question == null || question.questionId) {
-
-  console.log('if', question);    
+     
   schedulePushNotification('', '', '', '', '', notificationTimeInSeconds, startDate, endDate);
   } else {
     const tomorrow = new Date();
@@ -108,7 +122,7 @@ if (question == null || question.questionId) {
 
 useEffect(() => {
   Notifications.cancelAllScheduledNotificationsAsync();
-  scheduleNotifications();
+  // scheduleNotifications();
 }, []);
 
 
