@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Cadet Wellbeing",
-    "slug": "Cadet Wellbeing",
+    "slug": "trial4",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.psichael.cadetWellbeing"
     },
     "android": {
       "adaptiveIcon": {
@@ -34,4 +35,3 @@
     }
   }
 }
-

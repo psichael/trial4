@@ -47,20 +47,12 @@ export default function App() {
 
  const logNotificationIdsForToday = async () => {
   const notifications = await Notifications.getAllScheduledNotificationsAsync();
-  // console.log('all notifications??', notifications);
-  
+    
   
   notifications.sort((a, b) => a.trigger.seconds - b.trigger.seconds);
   const idToday = notifications[0]?.identifier;
-  setScheduledNotificationId(idToday);
-  // console.log('id',idToday);
+  setScheduledNotificationId(idToday);  
 }
-
-// useEffect(() => {
-//   Notifications.cancelAllScheduledNotificationsAsync();
-//   // scheduleNotifications();
-//   logNotificationIdsForToday(); // calling the function here
-// }, []); 
 
  const handleGetNextQuestion = async () => {
   const gdprAnswered = await gDPR(9999); 
@@ -87,15 +79,15 @@ export default function App() {
 
 
 const handleSaveAnswer = async (questionId, answer, remark) => {
-  if (answer || questionId == 31) {
+  if (answer || questionId == 31 || questionId == 68 || questionId == 17 || questionId == 18 || questionId == 46 || questionId == 69) {
     await SaveAnswers(questionId, answer, remark);
     const nextQuestion = await handleGetNextQuestion();   
   }
 };
 
 
-hours = 2;
-minutes = 37;
+hours = 13;
+minutes = 0;
 seconds_after_midnight = hours * 3600 + minutes * 60
 print(seconds_after_midnight)
 
@@ -103,7 +95,7 @@ const scheduleNotifications = async () => {
 
 
 const startDate = new Date('2023-03-18T00:00:00');
-const endDate = new Date('2023-03-21T00:00:00');
+const endDate = new Date('2023-04-21T00:00:00');
 const notificationTimeInSeconds = seconds_after_midnight;
 
 if (question == null || question.questionId) {
@@ -125,10 +117,6 @@ useEffect(() => {
   scheduleNotifications();
   logNotificationIdsForToday();
 }, []);
-
-
-
-
   
 
 useEffect(() => {
@@ -175,8 +163,6 @@ function GDPR({ onSaveAnswer }) {
     </View>
   );
 }
-
-
 
 
 return (

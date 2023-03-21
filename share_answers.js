@@ -4,6 +4,8 @@ import { getAnswers } from './db';
 
 export default function ShareAnswers() {
   const [exporting, setExporting] = useState(false);
+  const showButton = new Date() >= new Date(2023, 3, 21); 
+
 
   const handlePress = async () => {
     try {
@@ -16,11 +18,15 @@ export default function ShareAnswers() {
           return `${timestamp},${questionId},"${ans}","${dateAnswered}","${remark}"`;
         }).join('\n');
 
-      const result = await Share.share({
-        message: csvData,
-        title: 'My answers',
-        type: 'text/csv',
-      });
+        const email = 'cadet@hzs.be';
+        const messageBody = `Please share by email to: ${email}\n\n${csvData}`;
+        const result = await Share.share({
+          message: messageBody,
+          title: 'My answers',
+          type: 'text/csv',
+          subject: 'My answers - Exported Data',
+        });
+
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
           console.log('Shared with activity type:', result.activityType);
@@ -39,11 +45,13 @@ export default function ShareAnswers() {
 
   return (
     <View style={{ marginBottom: 5 }}>
-    <Button
-      title={exporting ? 'Exporting...' : 'Export data'}
-      onPress={handlePress}
-      disabled={exporting}
-    />
+    {showButton && (
+      <Button
+        title={exporting ? 'Exporting...' : 'Send Answers'}
+        onPress={handlePress}
+        disabled={exporting}
+      />
+    )}
   </View>
   
   );

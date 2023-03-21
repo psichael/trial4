@@ -39,7 +39,7 @@ export async function schedulePushNotification(
     notificationTimeInSeconds, // the time of day in seconds
     startDate // the start date for the notification schedule
  ) {
-    const endDate = new Date('2023-03-25T00:00:00'); // end date is March 21
+    const endDate = new Date('2023-04-21T00:00:00'); 
     const currentTime = new Date();
      // Calculate the timestamp for the specified time of day
     const timestamp = new Date();

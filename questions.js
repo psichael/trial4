@@ -114,13 +114,13 @@ export const questions = {
     questionId: 17,
     questionText: 'Dear cadet, you are about to embark on your internship! Thank you for taking a few minutes to answer the following questions.',
     answerType: 'radios',
-    radioOptions: ['Continue'],
+    radioOptions: [],
     },
   18: {
     questionId: 18,
     questionText: 'Thank you for sharing how you feel. A few more items to go…',
     answerType: 'radios',
-    radioOptions: ['Continue'],
+    radioOptions: [],
     },
   19: {
     questionId: 19,
@@ -196,7 +196,7 @@ export const questions = {
     },
   31: {
     questionId: 31,
-    questionText: 'Only if you feel the need…',
+    questionText: 'Would you like to share anything else?',
     answerType: 'text',
     },
   32: {
@@ -294,7 +294,7 @@ export const questions = {
     questionId: 46,
     questionText: 'Thank you for sharing how you feel. Almost finished…',
     answerType: 'radios',
-    radioOptions: ['Continue'],
+    radioOptions: [],
     },
   47: {
     questionId: 47,
@@ -427,13 +427,13 @@ export const questions = {
     questionId: 68,
     questionText: 'Merci de votre participation! Afin de conclure correctement cette enquête, nous vous demandons d\'exporter les données, même si vous n\'avez rien rempli ou très peu. \n\nBedankt voor je deelname! Om dit experiment correct af te sluiten, vragen we je de data te exporteren, ook al heb je weinig of niets ingevuld! \n\nEnjoy your time at home :)',
     answerType: 'radios',
-    radioOptions: ['Continue'],
+    radioOptions: [],
     },
   69: {
     questionId: 69,
     questionText: 'Thank you for sharing how you feel ! Just a few more items about your shore leave…',
     answerType: 'radios',
-    radioOptions: ['Continue'],
+    radioOptions: [],
     },
   70: {
     questionId: 70,
@@ -442,6 +442,29 @@ export const questions = {
     answerType: 'radios',
     radioOptions: ['Never', 'Rarely', 'Regularly', 'Every day'],
     },
-    
+  71: {
+    questionId: 71,
+    questionText: 'My gender is',
+    answerType: 'radios',
+    radioOptions: ['Female', 'Male', 'Other'],
+    },
+  72: {
+    questionId: 72,
+    questionText: 'I am part of team',
+    answerType: 'radios',
+    radioOptions: ['IA','IB','IC','IIA','IIB','IIC','IIIA','IIIB','IIIC'],
+    },
+  73: {
+    questionId: 73,
+    questionText: 'I am in department',
+    answerType: 'radios',
+    radioOptions: ['NW', 'SN', 'SW', 'MN'],
+    },
+  74: {
+    questionId: 74,
+    questionText: 'I am a',
+    answerType: 'radios',
+    radioOptions: ['Coach', 'Student'],
+    },
   }
     

@@ -17,6 +17,7 @@ function OpenQuestion({ question, onSaveAnswer}) {
     <View>
       <Text style={{ fontSize: 20, fontWeight: 'bold', marginBottom: 30, color: '#1d71b8'  }}>{question.questionText}</Text>
       <TextInput
+        placeholder="Only if you feel the need"
         style={{ height: 40, borderColor: '#1d71b8', borderWidth: 1 }}
         onChangeText={handleTextChange}
         value={answer}
