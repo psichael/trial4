@@ -94,7 +94,7 @@ print(seconds_after_midnight)
 const scheduleNotifications = async () => {
 
 
-const startDate = new Date('2023-03-18T00:00:00');
+const startDate = new Date('2023-03-24T00:00:00');
 const endDate = new Date('2023-04-21T00:00:00');
 const notificationTimeInSeconds = seconds_after_midnight;
 

@@ -22,8 +22,8 @@ db.transaction(tx => {
 export function SaveAnswers(questionId, answer, remark) {
  const timestamp = new Date().getTime();
  const dateAnswered = new Date().toLocaleString();
-//  const dateAnsweredISO = new Date(timestamp).toISOString().slice(0, 10);
- const dateAnsweredISO = "7";
+ const dateAnsweredISO = new Date(timestamp).toISOString().slice(0, 10);
+//  const dateAnsweredISO = "7";
   
  return new Promise((resolve, reject) => {
    db.transaction(
@@ -46,8 +46,8 @@ export function SaveAnswers(questionId, answer, remark) {
 }
 
 export function isAnswered(questionId) {
-  // const today = new Date().toISOString().slice(0, 10);
-  const today = "7";
+ const today = new Date().toISOString().slice(0, 10);
+//  const today = "7";
  return new Promise((resolve, reject) => {
    db.transaction(tx => {
      tx.executeSql(
